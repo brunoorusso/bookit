@@ -61,7 +61,7 @@ router.post('/login', async(req, res) => {
     try{
         const {email, password} = req.body;
         const loginUser = await User.findOne({email});
-
+        console.log(loginUser);
         if(!loginUser){
             return res.status(404).json({error: 'User not found'});
         }
@@ -73,6 +73,7 @@ router.post('/login', async(req, res) => {
         }else{
             res.status(401).json({error: 'Incorrect password'});
         }
+
     } catch(error){
         console.error(error);
         res.status(500).json({error: 'Internal server error'});

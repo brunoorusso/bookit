@@ -1,14 +1,22 @@
 import logo from './logo.svg';
 import './App.css';
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Navbar from "./components/Navbar"
-import Auth from "./components/User/Auth"
+import Register from './components/User/Register'
+import Login from './components/User/Login'
 function App() {
   return (
   <div className="bg-primary w-full overflow-hidden">
     <div className={`flex justify-center items-center w-full`}>
       <div className={`w-full`}>
+        <Router>
         <Navbar />
-        <Auth />
+            <Routes>
+              <Route path="/login" element={<Login />}/>
+              <Route path="/register" element={<Register />}/>
+            </Routes>
+        </Router>
       </div>
     </div>
   </div>

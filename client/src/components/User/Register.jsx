@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+import { useNavigate } from 'react-router-dom';
 import api from '../../services/api';
 
 export default function Register(){
@@ -8,9 +9,9 @@ export default function Register(){
             phone: '',
             password: ''
         });
-    
-    const [passwordMatch, setPasswordMatch] = useState(true);
 
+    const navigate = useNavigate();
+    
     const handleInputChange = (event) => {
         const {name, value} = event.target;
 
@@ -19,9 +20,6 @@ export default function Register(){
             ...prevData,
             [name] : value
         }))
-
-        console.log(userData);
-
     };
 
     const handleSubmit = async(ev) => {
@@ -39,6 +37,8 @@ export default function Register(){
                 phone: '',
                 password: ''
             });
+
+            navigate('/login');
         } catch(error){
             console.error('Erro ao enviar dados', error);
         }

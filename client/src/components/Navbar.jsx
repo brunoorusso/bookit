@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 export default function Navbar() {
   return (
@@ -6,10 +7,9 @@ export default function Navbar() {
       <div className="flex items-center justify-between">
         <div className="text-white font-bold text-lg">Logo</div>
         <div className="space-x-4">
-          <a href="#" className="text-white hover:text-gray-300">Home</a>
-          <a href="#" className="text-white hover:text-gray-300">Login</a>
+          <Link to="/login" className="text-white hover:text-gray-300">Login</Link>
         </div>
-    </div>
-  </nav>
-  )
-}
+      </div>
+    </nav>
+  );
+};
