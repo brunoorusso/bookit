@@ -1,14 +1,14 @@
 import logo from './logo.svg';
 import './App.css';
-
-
 import Navbar from "./components/Navbar"
+import Auth from "./components/User/Auth"
 function App() {
   return (
-    <div className="bg-primary w-full overflow-hidden">
-    <div className={`sm:px-16 px-6 flex justify-center items-center`}>
-      <div className={`xl:max-w-[1280px] w-full`}>
+  <div className="bg-primary w-full overflow-hidden">
+    <div className={`flex justify-center items-center w-full`}>
+      <div className={`w-full`}>
         <Navbar />
+        <Auth />
       </div>
     </div>
   </div>
