@@ -3,6 +3,8 @@ const router = express.Router();
 const bcrypt = require('bcrypt');
 const User = require('../models/User');
 
+const salt = bcrypt.genSaltSync(10)
+
 router.get('/all', async(req, res) => {
     try{
         const users = await User.find();
@@ -25,11 +27,30 @@ router.post('/register', async(req, res) => {
             }))
         }
 
-        //Criar novo user
-        const newUser = new User({name, email, phone, password});
-        const savedUser = await newUser.save();
+        //Encrypt password
+        bcrypt.hash(password, salt, async (err, hash) => {
+            if(err){
+                return res.status(500).json({
+                    error: 'Error hashing password'
+                });
+            }
 
-        res.status(201).json(savedUser);
+            const newUser = new User({
+                name,
+                email,
+                phone,
+                password: hash //guardar hashed password
+            });
+
+            try{
+                const savedUser = await newUser.save();
+                res.status(201).json(savedUser);
+            } catch(error){
+                res.status(500).json({
+                    error: 'Error saving user to database'
+                })
+            }
+        });
     } catch(error){
         console.error(error);
         res.status(500).json({error: 'Internal server error'});
