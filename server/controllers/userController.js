@@ -3,6 +3,15 @@ const router = express.Router();
 const bcrypt = require('bcrypt');
 const User = require('../models/User');
 
+router.get('/all', async(req, res) => {
+    try{
+        const users = await User.find();
+        res.json(users);
+    }catch(err){
+        res.status(500).json({err: 'Internal server error'});
+    }
+});
+
 router.post('/register', async(req, res) => {
     try{
         //Dados que vêm do form de registo, no corpo do request
