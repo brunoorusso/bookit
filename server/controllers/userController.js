@@ -17,7 +17,7 @@ router.get('/all', async(req, res) => {
 router.post('/register', async(req, res) => {
     try{
         //Dados que vêm do form de registo, no corpo do request
-        const {name, email, phone, password} = req.body;
+        const {name, email, phone, password, isCompany} = req.body;
 
         //Verificar que o user não existe
         const duplicatedUser = await User.findOne({email});
@@ -39,7 +39,8 @@ router.post('/register', async(req, res) => {
                 name,
                 email,
                 phone,
-                password: hash //guardar hashed password
+                password: hash, //guardar hashed password
+                isCompany 
             });
 
             try{

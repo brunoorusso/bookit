@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Navbar from "./components/Navbar"
 import Register from './components/User/Register'
 import Login from './components/User/Login'
+import NewService from './components/NewService';
 function App() {
   return (
   <div className="bg-primary w-full overflow-hidden">
@@ -15,6 +16,7 @@ function App() {
             <Routes>
               <Route path="/login" element={<Login />}/>
               <Route path="/register" element={<Register />}/>
+              <Route path="/new-service" element={<NewService />}/>
             </Routes>
         </Router>
       </div>

@@ -7,18 +7,21 @@ export default function Register(){
             name: '',
             email: '',
             phone: '',
-            password: ''
+            password: '',
+            isCompany: false
         });
 
     const navigate = useNavigate();
     
     const handleInputChange = (event) => {
-        const {name, value} = event.target;
+        const {name, value, type, checked} = event.target;
+
+        const inputValue = type === 'checkbox' ? checked : value;
 
         //Atualizar dados
         setUserData((prevData) => ({
             ...prevData,
-            [name] : value
+            [name] : inputValue
         }))
     };
 
@@ -35,7 +38,8 @@ export default function Register(){
                 name: '',
                 email: '',
                 phone: '',
-                password: ''
+                password: '',
+                isCompany: false
             });
 
             navigate('/login');
@@ -124,6 +128,24 @@ export default function Register(){
                 />
               </div>
             </div>
+            <div className="flex items-center justify-auto">
+            <div className="mt-2">
+              <input
+                id="isCompany"
+                name="isCompany"
+                type="checkbox"
+                checked={userData.isCompany}
+                onChange={handleInputChange}
+                className="form-checkbox h-5 w-5 text-indigo-600 transition duration-150 ease-in-out"
+              />
+            </div>
+            <label
+              htmlFor="isCompany"
+              className="block text-sm font-bold leading-6 text-gray-900 ml-2"
+            >
+              Company Account
+            </label>
+          </div>
             <div>
               <button
                 type="submit"
