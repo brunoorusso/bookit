@@ -1,14 +1,15 @@
 import React, {useState} from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import api from '../../services/api';
 
 export default function Login(props){
-    const { onRegisterClick } = props;
 
     const [userData, setUserData] = useState({
       email: '',
       password: ''
-    })
+    });
+
+    const navigate = useNavigate();
 
     const handleInputChange = (event) => {
       const {name, value} = event.target;
@@ -29,13 +30,19 @@ export default function Login(props){
       try{
           //Chamada à API
           const response = await api.post('/users/login', userData);
-          console.log("Resposta da API: ", response.data);
+
+          if(response.data.token){
+            //armazenar token
+            localStorage.setItem('token', response.data.token);
+            props.setIsAuth(true);
+          }
           
           //Limpar form
           setUserData({
               email: '',
               password: ''
           });
+          navigate('/');
       } catch(error){
           console.error('Erro ao enviar dados', error);
       }

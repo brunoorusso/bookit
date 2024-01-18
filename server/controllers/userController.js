@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 
 const salt = bcrypt.genSaltSync(10)
@@ -70,7 +71,8 @@ router.post('/login', async(req, res) => {
         const passwordMatch = await bcrypt.compare(password, loginUser.password);
         if(passwordMatch){
             console.log("Logged in");
-            res.status(200).json(loginUser);
+            const token = jwt.sign({userId: loginUser.id, email: loginUser.email}, 'secretpassword', {expiresIn: '1h'});
+            res.status(200).json({token});
         }else{
             res.status(401).json({error: 'Incorrect password'});
         }
