@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import api from "../services/api";
 
 export default function NewService() {
@@ -14,9 +14,26 @@ export default function NewService() {
   const [endTime, setEndTime] = useState("");
   const [duration, setDuration] = useState(30);
 
-  const calculateAvailability = (start, end, duration) => {
+  useEffect(() => {
+    const calculate = async () => {
+      const calculatedAvailability = await calculateAvailability(
+        startTime,
+        endTime,
+        duration
+      );
+  
+      setServiceData((prevData) => ({
+        ...prevData,
+        availability: calculatedAvailability,
+      }));
+    };
+  
+    calculate();
+  }, [startTime, endTime, duration]);
+
+  const calculateAvailability = async (start, end, duration) => {
     const availability = [];
-    
+
     const startTime = new Date(`2022-01-01T${start}`);
     const endTime = new Date(`2022-01-01T${end}`);
 
@@ -58,23 +75,20 @@ export default function NewService() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const calculatedAvailability = calculateAvailability(
-      startTime,
-      endTime,
-      duration
-    );
+    try{
+      const response = await api.post('/services/new', serviceData);
+      console.log("Resposta da API: ", response.data);
 
-    setServiceData((prevData) => ({
-        ...prevData,
-        availability: calculatedAvailability,
-      }), () => {
-        // O código a seguir será executado após o estado ser atualizado
-        console.log(`Start Time : ${startTime} | End Time : ${endTime}`);
-        console.log(serviceData);
+      setServiceData({
+        name: "",
+        phone: "",
+        description: "",
+        location: "",
+        availability: []
       });
-
-    console.log(`Start Time : ${startTime} | End Time : ${endTime}`)
-    console.log(serviceData);
+    } catch(error){
+      console.error('Erro ao enviar dados', error);
+    }
   };
 
   return (

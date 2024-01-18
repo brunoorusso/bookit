@@ -7,6 +7,7 @@ export default function Navbar() {
       <div className="flex items-center justify-between">
         <div className="text-white font-bold text-lg">Logo</div>
         <div className="space-x-4">
+          <Link to="/" className="text-white hover:text-gray-300">Home</Link>
           <Link to="/login" className="text-white hover:text-gray-300">Sign in</Link>
           <Link to="/new-service" className="text-white hover:text-gray-300">New Service</Link>
         </div>
