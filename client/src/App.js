@@ -7,23 +7,27 @@ import Register from './components/User/Register'
 import Login from './components/User/Login'
 import Services from './components/Services';
 import NewService from './components/NewService';
-import jwtDecode from 'jwt-decode';
-
+import "core-js/stable/atob";
+import { jwtDecode } from "jwt-decode";
 
 function App() {
-  const [isAuth, setIsAuth] = useState(!localStorage.getItem('token'));
+  const [authToken, setAuthToken] = useState(!localStorage.getItem('token'));
   const [currentUser, setCurrentUser] = useState(null);
 
-  /*useEffect(() => {
-    if(isAuth){
-      const decodedUser = jwtDecode(isAuth);
-      setCurrentUser(isAuth);
+  useEffect(() => {
+    if (authToken) {
+      try {
+        const decodedUser = jwtDecode(authToken);
+        setCurrentUser(decodedUser);
+      } catch (error) {
+        console.error('Erro ao decodificar o token:', error);
+      }
     }
-  }, [isAuth]);*/
+  }, [authToken]);
 
   const handleLogout = () => {
     localStorage.removeItem('token');
-    setIsAuth(false);
+    setAuthToken(false);
   }
 
   return (
@@ -31,10 +35,10 @@ function App() {
     <div className={`flex justify-center items-center w-full`}>
       <div className={`w-full`}>
         <Router>
-        <Navbar isAuth={isAuth} setIsAuth={setIsAuth} handleLogout={handleLogout}/>
+        <Navbar currentUser={currentUser} handleLogout={handleLogout}/>
             <Routes>
               <Route path="/" element={<Services />}/>
-              <Route path="/login" element={<Login setIsAuth={setIsAuth}/>}/>
+              <Route path="/login" element={<Login authToken={authToken} setAuthToken={setAuthToken}/>}/>
               <Route path="/register" element={<Register />}/>
               <Route path="/new-service" element={<NewService />}/>
             </Routes>

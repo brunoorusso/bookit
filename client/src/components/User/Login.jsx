@@ -19,9 +19,6 @@ export default function Login(props){
           ...prevData,
           [name] : value
       }))
-
-      console.log(userData);
-
   };
 
     const handleSubmit = async(ev) => {
@@ -34,7 +31,7 @@ export default function Login(props){
           if(response.data.token){
             //armazenar token
             localStorage.setItem('token', response.data.token);
-            props.setIsAuth(true);
+            props.setAuthToken(response.data.token);
           }
           
           //Limpar form
