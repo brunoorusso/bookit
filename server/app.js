@@ -4,6 +4,7 @@ const db = require('./db');
 const cors = require('cors');
 const userRouter = require('./controllers/userController');
 const serviceRouter = require('./controllers/serviceController')
+const appointmentRouter = require('./controllers/appointmentController');
 const app = express();
 const port = process.env.PORT || 3500;
 
@@ -17,5 +18,6 @@ app.get("/api", (req, res) => {
 
 app.use('/users', userRouter);
 app.use('/services', serviceRouter);
+app.use('/appointments', appointmentRouter);
 
 app.listen(port, () => console.log(`On Port ${port}`));

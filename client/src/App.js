@@ -11,7 +11,7 @@ import "core-js/stable/atob";
 import { jwtDecode } from "jwt-decode";
 
 function App() {
-  const [authToken, setAuthToken] = useState(!localStorage.getItem('token'));
+  const [authToken, setAuthToken] = useState(!!localStorage.getItem('token'));
   const [currentUser, setCurrentUser] = useState(null);
 
   useEffect(() => {
@@ -37,7 +37,7 @@ function App() {
         <Router>
         <Navbar currentUser={currentUser} handleLogout={handleLogout}/>
             <Routes>
-              <Route path="/" element={<Services />}/>
+              <Route path="/" element={<Services currentUser={currentUser}/>}/>
               <Route path="/login" element={<Login authToken={authToken} setAuthToken={setAuthToken}/>}/>
               <Route path="/register" element={<Register />}/>
               <Route path="/new-service" element={<NewService />}/>

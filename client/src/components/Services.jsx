@@ -2,13 +2,14 @@ import React, { useEffect, useState } from "react";
 import api from "../services/api";
 import Modal from "./Modal";
 
-export default function Services() {
+export default function Services(props) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
 
   const handleBookClick = (item) => {
     setSelectedItem(item);
     setIsModalOpen(true);
+    console.log(props.currentUser)
   };
 
   const handleCloseModal = () => {
@@ -56,15 +57,15 @@ export default function Services() {
                 {item.description}
               </p>
               <div className="flex justify-end mt-4">
-                <button onClick={() => handleBookClick(item)} className="justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+                {props.currentUser && <button onClick={() => handleBookClick(item)} className="justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
                   Book
-                </button>
+                </button>}
               </div>
             </div>
           </div>
         </div>
       ))}
-      <Modal isOpen={isModalOpen} onClose={handleCloseModal} selectedItem={selectedItem} />
+      <Modal currentUser={props.currentUser} isOpen={isModalOpen} onClose={handleCloseModal} selectedItem={selectedItem} />
     </div>
   );
 }
