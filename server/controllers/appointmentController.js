@@ -11,6 +11,21 @@ router.get('/all', async(req, res) => {
     }
 });
 
+router.get('/:serviceId', async(req, res) => {
+    const { serviceId } = req.params;
+
+    try{
+        const appointment = await Appointment.findOne({ serviceId });
+        if (!appointment) {
+            return res.status(404).json({ error: 'Appointment not found' });
+        }
+        res.json(appointment);
+    } catch (error) {
+        console.error('Error finding appointment:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+      }
+});
+
 router.post('/new', async(req, res) => {
     try{
         const {userId, serviceId, time, date} = req.body;

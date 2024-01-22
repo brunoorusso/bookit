@@ -10,6 +10,11 @@ export default function Navbar(props) {
           <Link to="/" className="text-white hover:text-gray-300">
             Home
           </Link>
+          {props.currentUser && !props.currentUser.isCompany && (
+            <Link to="/" className="text-white hover:text-gray-300">
+              My Appointments
+            </Link>
+          )}
           {props.currentUser && props.currentUser.isCompany && (
             <Link to="/new-service" className="text-white hover:text-gray-300">
               New Service

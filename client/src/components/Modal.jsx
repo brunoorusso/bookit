@@ -1,25 +1,41 @@
-import React, {useState, useEffect} from "react";
-import api from '../services/api';
+import React, { useState, useEffect } from "react";
+import api from "../services/api";
 
 const Modal = (props) => {
   const { isOpen, onClose, selectedItem, currentUser } = props;
   const [selectedTime, setSelectedTime] = useState(null);
   const [selectedDate, setSelectedDate] = useState(new Date());
 
+  const [available, setAvailable] = useState("bg-green-500");
+
   useEffect(() => {
     if (isOpen) {
       // Atualiza a data quando o modal é aberto
       setSelectedDate(new Date());
+    } else {
+      setSelectedTime(null);
     }
   }, [isOpen]);
-  
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await api.get(`/appointments/${selectedItem._id}`);
+
+      } catch (error) {
+        console.error("Erro ao ir buscar os dados");
+      }
+    };
+    fetchData();
+  }, [selectedItem]);
+
   if (!isOpen || !selectedItem) {
     return null;
   }
-  
+
   const formatDate = (date) => {
-    const options = { weekday: 'long', month: 'long', day: 'numeric' };
-    return date.toLocaleDateString('en-US', options);
+    const options = { weekday: "long", month: "long", day: "numeric" };
+    return date.toLocaleDateString("en-US", options);
   };
 
   const handleDateChange = (days) => {
@@ -29,7 +45,7 @@ const Modal = (props) => {
     const today = new Date();
     const maxDate = new Date();
     maxDate.setDate(today.getDate() + 7);
-    if(newDate >= today && newDate <= maxDate){
+    if (newDate >= today && newDate <= maxDate) {
       setSelectedDate(newDate);
     }
   };
@@ -40,21 +56,20 @@ const Modal = (props) => {
 
   const handleSubmit = async (ev) => {
     ev.preventDefault();
-  
+
     try {
       const appointmentData = {
         userId: currentUser.userId,
         serviceId: selectedItem._id,
         time: selectedTime,
-        date: selectedDate.toISOString()
+        date: selectedDate.toISOString(),
       };
 
       console.log("Dados do agendamento a serem enviados:", appointmentData);
 
-      const response = await api.post('/appointments/new', appointmentData);
-  
+      const response = await api.post("/appointments/new", appointmentData);
     } catch (error) {
-      console.error('Erro ao enviar dados', error);
+      console.error("Erro ao enviar dados", error);
     }
   };
 
@@ -95,7 +110,9 @@ const Modal = (props) => {
             </button>
 
             {/* Exibir data centralizada */}
-            <p className="text-gray-600 font-semibold text-xl">{formatDate(selectedDate)}</p>
+            <p className="text-gray-600 font-semibold text-xl">
+              {formatDate(selectedDate)}
+            </p>
 
             {/* Botão para avançar um dia */}
             <button
@@ -121,11 +138,13 @@ const Modal = (props) => {
             </div>
           </div>
           <div className="flex justify-end mt-4">
-                <button className="justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                onClick={handleSubmit}>
-                  Book
-                </button>
-              </div>
+            <button
+              className="justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+              onClick={handleSubmit}
+            >
+              Book
+            </button>
+          </div>
           <span
             className="absolute top-2 right-2 cursor-pointer font-bold"
             onClick={onClose}
