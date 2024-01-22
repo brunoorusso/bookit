@@ -1,5 +1,11 @@
+const dotenv = require('dotenv');
 const mongoose = require('mongoose');
-const MONGO_URI = 'mongodb+srv://brunoorusso:MongoDB123@cluster0.rk15yc1.mongodb.net/?retryWrites=true&w=majority';
+const path = require('path');
+const root = path.resolve(__dirname, '..');
+process.chdir(root);
+dotenv.config();
+
+const MONGO_URI = process.env.URI;
 
 mongoose.connect(MONGO_URI, {
     useNewUrlParser: true,

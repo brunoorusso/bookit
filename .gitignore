@@ -1,0 +1,25 @@
+# Editor/IDE configuração
+.idea/
+.vscode/
+
+# Sistemas operacionais
+.DS_Store
+Thumbs.db
+
+# Dependências Node.js
+/node_modules
+
+# Diretório gerado durante o build
+/dist
+/build
+/out
+
+# Arquivos de ambiente
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Cache do Jest
+**/coverage/
