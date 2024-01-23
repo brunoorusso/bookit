@@ -15,7 +15,7 @@ router.get('/:serviceId', async(req, res) => {
     const { serviceId } = req.params;
 
     try{
-        const appointment = await Appointment.findOne({ serviceId });
+        const appointment = await Appointment.find({ serviceId });
         if (!appointment) {
             return res.status(404).json({ error: 'Appointment not found' });
         }

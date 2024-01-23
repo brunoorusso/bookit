@@ -5,8 +5,7 @@ const Modal = (props) => {
   const { isOpen, onClose, selectedItem, currentUser } = props;
   const [selectedTime, setSelectedTime] = useState(null);
   const [selectedDate, setSelectedDate] = useState(new Date());
-
-  const [available, setAvailable] = useState("bg-green-500");
+  const [data, setData] = useState([]);
 
   useEffect(() => {
     if (isOpen) {
@@ -14,6 +13,7 @@ const Modal = (props) => {
       setSelectedDate(new Date());
     } else {
       setSelectedTime(null);
+      setData([]);
     }
   }, [isOpen]);
 
@@ -21,7 +21,7 @@ const Modal = (props) => {
     const fetchData = async () => {
       try {
         const response = await api.get(`/appointments/${selectedItem._id}`);
-
+        setData(response.data);
       } catch (error) {
         console.error("Erro ao ir buscar os dados");
       }
@@ -38,15 +38,36 @@ const Modal = (props) => {
     return date.toLocaleDateString("en-US", options);
   };
 
-  const handleDateChange = (days) => {
-    const newDate = new Date(selectedDate);
-    newDate.setDate(selectedDate.getDate() + days);
+  const isReserved = (serviceId, time, date) => {
+    const result = data.some((reservation) => {
+      const reservationDate = new Date(reservation.date);
+      const selectedDateCopy = new Date(selectedDate);
 
-    const today = new Date();
-    const maxDate = new Date();
-    maxDate.setDate(today.getDate() + 7);
-    if (newDate >= today && newDate <= maxDate) {
-      setSelectedDate(newDate);
+      return (
+        reservation.serviceId === serviceId &&
+        reservation.time === time &&
+        reservationDate.toDateString() === selectedDateCopy.toDateString()
+      );
+    });
+
+    return result;
+  };
+
+  const handleDateChange = (days) => {
+    if (isOpen) {
+      const newDate = new Date(selectedDate);
+      newDate.setDate(selectedDate.getDate() + days);
+  
+      const today = new Date();
+      today.setHours(0, 0, 0, 0); // Define a hora para 00:00:00 para comparar apenas as datas
+  
+      const maxDate = new Date(today);
+      maxDate.setDate(today.getDate() + 7);
+  
+      // Verifica se a nova data está dentro dos limites permitidos
+      if (newDate >= today && newDate <= maxDate) {
+        setSelectedDate(newDate);
+      }
     }
   };
 
@@ -124,13 +145,21 @@ const Modal = (props) => {
           </div>
           <div className="flex items-center mt-3 justify-center">
             <div className="grid grid-cols-3 gap-4">
-            {selectedItem.availability.map((time) => (
+              {selectedItem.availability.map((time) => (
                 <div
                   key={time.id}
                   className={`cursor-pointer p-4 rounded-lg ${
-                    selectedTime === time ? "bg-green-500" : "bg-gray-100"
+                    selectedTime === time
+                      ? "bg-green-500"
+                      : isReserved(
+                          selectedItem._id,
+                          time,
+                          selectedDate.toISOString()
+                        )
+                      ? "bg-red-500 cursor-not-allowed"
+                      : "bg-gray-100"
                   }`}
-                  onClick={() => handleTimeClick(time)}
+                  onClick={() => !isReserved(selectedItem._id, time, selectedDate.toISOString()) && handleTimeClick(time)}
                 >
                   <ul>{time}</ul>
                 </div>
