@@ -38,7 +38,7 @@ const Modal = (props) => {
     return date.toLocaleDateString("en-US", options);
   };
 
-  const isReserved = (serviceId, time, date) => {
+  const isReserved = (serviceId, time) => {
     const result = data.some((reservation) => {
       const reservationDate = new Date(reservation.date);
       const selectedDateCopy = new Date(selectedDate);
@@ -153,13 +153,12 @@ const Modal = (props) => {
                       ? "bg-green-500"
                       : isReserved(
                           selectedItem._id,
-                          time,
-                          selectedDate.toISOString()
+                          time
                         )
                       ? "bg-red-500 cursor-not-allowed"
                       : "bg-gray-100"
                   }`}
-                  onClick={() => !isReserved(selectedItem._id, time, selectedDate.toISOString()) && handleTimeClick(time)}
+                  onClick={() => !isReserved(selectedItem._id, time) && handleTimeClick(time)}
                 >
                   <ul>{time}</ul>
                 </div>
