@@ -9,7 +9,6 @@ export default function Services(props) {
   const handleBookClick = (item) => {
     setSelectedItem(item);
     setIsModalOpen(true);
-    console.log(props.currentUser)
   };
 
   const handleCloseModal = () => {

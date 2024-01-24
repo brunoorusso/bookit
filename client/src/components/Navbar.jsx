@@ -11,7 +11,7 @@ export default function Navbar(props) {
             Home
           </Link>
           {props.currentUser && !props.currentUser.isCompany && (
-            <Link to="/" className="text-white hover:text-gray-300">
+            <Link to="/my-appointments" className="text-white hover:text-gray-300">
               My Appointments
             </Link>
           )}

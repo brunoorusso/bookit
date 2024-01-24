@@ -9,6 +9,7 @@ import Services from './components/Services';
 import NewService from './components/NewService';
 import "core-js/stable/atob";
 import { jwtDecode } from "jwt-decode";
+import MyAppointments from './components/MyAppointments';
 
 function App() {
   const [authToken, setAuthToken] = useState(!!localStorage.getItem('token'));
@@ -41,6 +42,7 @@ function App() {
               <Route path="/login" element={<Login authToken={authToken} setAuthToken={setAuthToken}/>}/>
               <Route path="/register" element={<Register />}/>
               <Route path="/new-service" element={<NewService />}/>
+              <Route path="/my-appointments" element={<MyAppointments currentUser={currentUser}/>}/>
             </Routes>
         </Router>
       </div>

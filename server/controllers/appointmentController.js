@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Appointment = require('../models/Appointment');
 
+// Todos os appointments
 router.get('/all', async(req, res) => {
     try{
         const appointments = await Appointment.find();
@@ -11,6 +12,22 @@ router.get('/all', async(req, res) => {
     }
 });
 
+// Appointment por user
+router.get('/:userId', async(req, res) => {
+    const {userId} = req.params;
+    try{
+        const appointment = await Appointment.find({ userId });
+        if(!appointment){
+            return res.status(404).json({ error: 'Appointment not found' });
+        }
+        res.json(appointment);
+    } catch (error) {
+        console.error('Error finding appointment:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+      }
+})
+
+// Appointment por serviço
 router.get('/:serviceId', async(req, res) => {
     const { serviceId } = req.params;
 

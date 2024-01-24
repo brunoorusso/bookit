@@ -11,6 +11,22 @@ router.get('/all', async(req, res) => {
     }
 });
 
+// Appointment por user
+router.get('/:id', async(req, res) => {
+    const {id} = req.params;
+    try{
+        const service = await Service.find({ _id: id });
+        if(!service){
+            return res.status(404).json({ error: 'Service not found' });
+        }
+        res.json(service);
+    } catch (error) {
+        console.error('Error finding service:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+      }
+})
+
+
 router.post('/new', async(req, res) => {
     try{
         //Dados que vêm do form de registo, no corpo do request
