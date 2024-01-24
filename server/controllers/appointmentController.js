@@ -13,7 +13,7 @@ router.get('/all', async(req, res) => {
 });
 
 // Appointment por user
-router.get('/:userId', async(req, res) => {
+router.get('/user/:userId', async(req, res) => {
     const {userId} = req.params;
     try{
         const appointment = await Appointment.find({ userId });

@@ -9,7 +9,7 @@ export default function MyAppointments(props) {
   useEffect(() => {
     const fetchData = async () => {
         try {
-            const response = await api.get(`/appointments/${props.currentUser.userId}`);
+            const response = await api.get(`/appointments/user/${props.currentUser.userId}`);
             const appointments = response.data;
             setAppointmentData(response.data);
             

@@ -28,6 +28,7 @@ const Modal = (props) => {
     };
     fetchData();
   }, [selectedItem]);
+  
 
   if (!isOpen || !selectedItem) {
     return null;
