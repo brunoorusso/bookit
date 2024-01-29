@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import api from "../services/api";
 import Modal from "./Modal";
 
+
 export default function Services(props) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
@@ -38,8 +39,8 @@ export default function Services(props) {
             <div className="relative">
               <img
                 className="w-full h-64 object-cover"
-                src="https://via.placeholder.com/600x360"
-                alt="Placeholder"
+                src={`/uploads/${item.image}`}
+                alt={item.name}
               />
               <div className="absolute bottom-0 right-0 bg-gray-800 text-white px-2 py-1 m-2 rounded-md text-xs">
                 📍 {item.location.toUpperCase()}

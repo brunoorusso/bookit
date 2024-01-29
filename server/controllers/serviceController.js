@@ -1,6 +1,20 @@
 const express = require('express');
 const router = express.Router();
 const Service = require('../models/Service');
+const path = require('path');
+const multer = require('multer');
+
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, path.join(__dirname, '../../client/public/uploads'));
+    },
+    filename: (req, file, cb) => {
+      // Gera um nome de arquivo único
+      cb(null, Date.now() + '-' + file.originalname);
+    }
+  });
+
+const upload = multer({storage});
 
 router.get('/all', async(req, res) => {
     try{
@@ -27,10 +41,11 @@ router.get('/:id', async(req, res) => {
 })
 
 
-router.post('/new', async(req, res) => {
+router.post('/new', upload.single('image'), async(req, res) => {
     try{
         //Dados que vêm do form de registo, no corpo do request
         const {name, phone, description, location, availability} = req.body;
+        const image = req.file;
 
         //Verificar que o user não existe
         const duplicatedService = await Service.findOne({phone});
@@ -45,7 +60,8 @@ router.post('/new', async(req, res) => {
                 phone,
                 description,
                 location,
-                availability
+                availability,
+                image: image.filename
             });
 
             try{

@@ -8,6 +8,7 @@ export default function NewService() {
     description: "",
     location: "",
     availability: [],
+    image: null
   });
 
   const [startTime, setStartTime] = useState("");
@@ -48,6 +49,15 @@ export default function NewService() {
     
   };
 
+  const handleFileChange = (e) => {
+    const selectedFile = e.target.files[0];
+    setServiceData((prevData) => ({
+      ...prevData,
+      image: selectedFile
+    }))
+  };
+
+
   const handleInputChange = (event) => {
     const {name, value} = event.target;
 
@@ -75,8 +85,26 @@ export default function NewService() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+
+    console.log(serviceData);
+    
+    const formData = new FormData();
+    formData.append('name', serviceData.name);
+    formData.append('phone', serviceData.phone);
+    formData.append('description', serviceData.description);
+    formData.append('location', serviceData.location);
+    formData.append('image', serviceData.image);
+
+    serviceData.availability.forEach((hour, index) => {
+      formData.append(`availability[${index}]`, hour);
+    });
+
     try{
-      const response = await api.post('/services/new', serviceData);
+      const response = await api.post('/services/new', formData, {
+        headers: {
+          'Content-Type' : 'multiform/form-data'
+        }
+      });
       console.log("Resposta da API: ", response.data);
 
       setServiceData({
@@ -84,7 +112,8 @@ export default function NewService() {
         phone: "",
         description: "",
         location: "",
-        availability: []
+        availability: [],
+        image: null
       });
     } catch(error){
       console.error('Erro ao enviar dados', error);
@@ -229,6 +258,28 @@ export default function NewService() {
               ></textarea>
             </div>
           </div>
+          <div>
+      <label
+        htmlFor="fileInput"
+        className="block text-sm font-bold leading-6 text-gray-900"
+      >
+        Upload File
+      </label>
+      <div className="mt-2 flex items-center">
+        <label htmlFor="fileInput" className="cursor-pointer bg-indigo-600 text-white py-2 px-4 rounded-md">
+          Choose File
+        </label>
+        <input
+          id="fileInput"
+          name="fileInput"
+          type="file"
+          accept=".jpg, .jpeg, .png"
+          className="hidden"
+          onChange={handleFileChange}
+        />
+      {serviceData.image && <span className="ml-2">{serviceData.image.name}</span>}
+      </div>
+    </div>
           <div className="col-span-2 mt-10">
             <button
               type="submit"

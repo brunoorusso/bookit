@@ -84,7 +84,7 @@ const Modal = (props) => {
         userId: currentUser.userId,
         serviceId: selectedItem._id,
         time: selectedTime,
-        date: selectedDate.toISOString(),
+        date: selectedDate.toISOString()
       };
 
       console.log("Dados do agendamento a serem enviados:", appointmentData);
@@ -105,8 +105,8 @@ const Modal = (props) => {
           <div className="relative">
             <img
               className="w-full h-64 object-cover rounded-md"
-              src="https://via.placeholder.com/600x360"
-              alt="Placeholder"
+              src={`/uploads/${selectedItem.image}`}
+              alt={selectedItem.name}
             />
             <div className="absolute top-0 right-0 bg-gray-800 text-white px-2 py-1 m-2 rounded-md text-xs">
               📍 {selectedItem.location.toUpperCase()}
