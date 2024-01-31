@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
 import AppointmentCard from './AppointmentCard'
 import api from "../services/api";
+import { formatDate } from "../utilities/dateFormatter" 
 
 export default function MyAppointments(props) {
   const [appointmentData, setAppointmentData] = useState([]);
   const [serviceData, setServiceData] = useState([]);
+  const [currentDate, setCurrentDate] = useState(new Date());
  
   useEffect(() => {
     const fetchData = async () => {
@@ -12,12 +14,15 @@ export default function MyAppointments(props) {
             const response = await api.get(`/appointments/user/${props.currentUser.userId}`);
             const appointments = response.data;
             setAppointmentData(response.data);
-
+          
             const appointmentDetails = await Promise.all(
                 appointments.map(async (appointment) => {
-                    console.log(`ID: ${appointment.serviceId}`)
+                    if(formatDate(currentDate, 'date') > formatDate(appointment.date, 'date')){
+                      deleteAppointment(appointment._id);
+                    }
                     const serviceResponse = await api.get(`/services/${appointment.serviceId}`);
                     const data = serviceResponse.data;
+                    
                     return {...appointment, data};
                 })
             );
@@ -29,7 +34,7 @@ export default function MyAppointments(props) {
           }
         };
         fetchData();
-    }, [])
+    }, [  ])
 
   const deleteAppointment = async (appointmentId) => {
     try{
@@ -50,7 +55,7 @@ export default function MyAppointments(props) {
                 name={dataObj.name} 
                 phone={dataObj.phone} 
                 location={dataObj.location}
-                date={appointment.date}
+                date={formatDate(appointment.date, 'date')}
                 time={appointment.time}
                 deleteAppointment={deleteAppointment}
                 />

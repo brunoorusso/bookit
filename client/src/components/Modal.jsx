@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import api from "../services/api";
+import { formatDate } from "../utilities/dateFormatter" 
 
 const Modal = (props) => {
   const { isOpen, onClose, selectedItem, currentUser } = props;
@@ -34,10 +35,7 @@ const Modal = (props) => {
     return null;
   }
 
-  const formatDate = (date) => {
-    const options = { weekday: "long", month: "long", day: "numeric" };
-    return date.toLocaleDateString("en-US", options);
-  };
+  
 
   const isReserved = (serviceId, time) => {
     const result = data.some((reservation) => {
@@ -84,10 +82,10 @@ const Modal = (props) => {
         userId: currentUser.userId,
         serviceId: selectedItem._id,
         time: selectedTime,
-        date: selectedDate.toISOString()
+        date: formatDate(selectedDate, 'date')
       };
 
-      console.log("Dados do agendamento a serem enviados:", appointmentData);
+      console.log("Dados do appointment a serem enviados:", appointmentData);
 
       const response = await api.post("/appointments/new", appointmentData);
     } catch (error) {
@@ -133,7 +131,7 @@ const Modal = (props) => {
 
             {/* Exibir data centralizada */}
             <p className="text-gray-600 font-semibold text-xl">
-              {formatDate(selectedDate)}
+              {formatDate(selectedDate, 'modalDate')}
             </p>
 
             {/* Botão para avançar um dia */}
