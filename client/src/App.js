@@ -41,7 +41,7 @@ function App() {
               <Route path="/" element={<Services currentUser={currentUser}/>}/>
               <Route path="/login" element={<Login authToken={authToken} setAuthToken={setAuthToken}/>}/>
               <Route path="/register" element={<Register />}/>
-              <Route path="/new-service" element={<NewService />}/>
+              <Route path="/new-service" element={<NewService currentUser={currentUser}/>}/>
               <Route path="/my-appointments" element={<MyAppointments currentUser={currentUser}/>}/>
             </Routes>
         </Router>

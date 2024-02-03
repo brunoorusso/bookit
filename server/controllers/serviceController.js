@@ -44,7 +44,7 @@ router.get('/:id', async(req, res) => {
 router.post('/new', upload.single('image'), async(req, res) => {
     try{
         //Dados que vêm do form de registo, no corpo do request
-        const {name, phone, description, location, availability} = req.body;
+        const {name, phone, description, location, availability, createdBy} = req.body;
         const image = req.file;
 
         //Verificar que o user não existe
@@ -61,7 +61,8 @@ router.post('/new', upload.single('image'), async(req, res) => {
                 description,
                 location,
                 availability,
-                image: image.filename
+                image: image.filename,
+                createdBy
             });
 
             try{

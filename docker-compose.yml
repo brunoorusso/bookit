@@ -1,0 +1,37 @@
+services:
+  client:
+    build: 
+      context: ./client
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+    volumes:
+      - ./client:/app
+      - /app/node_modules 
+    environment:
+      - WATCHPACK_POLLING = true
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    ports:
+      - "3500:3500"
+    environment:
+      - WATCHPACK_POLLING = true
+    depends_on:
+      - db
+    env_file:
+      - ./.env
+    volumes:
+      - ./server:/app
+      - /app/node_modules 
+  db:
+    volumes:
+      - bookit_db:/data/db
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+volumes:
+  bookit_db:

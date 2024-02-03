@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from "react";
 import api from "../services/api";
 
-export default function NewService() {
+export default function NewService(props) {
   const [serviceData, setServiceData] = useState({
     name: "",
     phone: "",
     description: "",
     location: "",
     availability: [],
-    image: null
+    image: null,
+    createdBy: ""
   });
 
   const [startTime, setStartTime] = useState("");
@@ -94,6 +95,7 @@ export default function NewService() {
     formData.append('description', serviceData.description);
     formData.append('location', serviceData.location);
     formData.append('image', serviceData.image);
+    formData.append('createdBy', props.currentUser.userId);
 
     serviceData.availability.forEach((hour, index) => {
       formData.append(`availability[${index}]`, hour);
@@ -113,7 +115,8 @@ export default function NewService() {
         description: "",
         location: "",
         availability: [],
-        image: null
+        image: null,
+        createdBy: ""
       });
     } catch(error){
       console.error('Erro ao enviar dados', error);
